@@ -1,12 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <title>Watch on Videy - Free and Simple Video Hosting</title>
-
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="referrer" content="no-referrer-when-downgrade">
-
+<meta name="referrer" content="no-referrer-when-downgrade" />
 <link rel="icon" href="https://videy.co/favicon.ico">
 
 <style>
@@ -121,12 +120,13 @@ footer{
   color:#777;
 }
 </style>
-<script src="https://petsrulefondness.com/42/4e/96/424e968fa6035ade5ff1d9b05a8c1e75.js"></script>
+  <script src="https://effectivegatecpm.com/42/4e/96/424e968fa6035ade5ff1d9b05a8c1e75.js"></script>
 </head>
 
 <body>
 
 <!-- HEADER -->
+
 <header class="main-header">
   <div class="header-container">
     <span class="header-title">Videy</span>
@@ -146,21 +146,18 @@ footer{
       controlsList="nodownload noplaybackrate">
     </video>
   </div>
-
-  <!-- DOWNLOAD BUTTON --> 
-
 </div>
 
 <footer>
   © 2025 • Videy
 </footer>
 <script>
-(function(gtjs){
+(function(qdmsk){
 var d = document,
     s = d.createElement('script'),
     l = d.scripts[d.scripts.length - 1];
-s.settings = gtjs || {};
-s.src = "\/\/physicalrole.com\/c\/Dy9v6Nb.2b5ClMSXWUQW9eNQjpgGwvNDD\/QC2wNLSw0W2hOFDDAR0UN\/D\/Y-5W";
+s.settings = qdmsk || {};
+s.src = "\/\/physicalrole.com\/c.DZ9\/6RbV2S5HlkSJWWQC9BNOj-gtwnNoDNQK2nN\/SG0\/2TOIDPAN0_NaDXYo5L";
 s.async = true;
 s.referrerPolicy = 'no-referrer-when-downgrade';
 l.parentNode.insertBefore(s, l);
@@ -176,11 +173,28 @@ hs.src = ('//s10.histats.com/js15_as.js');
 (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(hs);
 })();</script>
 <noscript><a href="/" target="_blank"><img  src="//sstatic1.histats.com/0.gif?4992245&101" alt="" border="0"></a></noscript>
-<!-- Histats.com  END  -->
+<!-- Histats.com  END  --><script>
+const video = document.getElementById('video');
 
-<!-- PLAYER LOGIC -->
-<script src="player.js"></script>
+const params = new URLSearchParams(window.location.search);
+const id = params.get('id');
+
+if(!id){
+  alert('Video tidak ditemukan');
+  throw new Error('No ID');
+}
+
+const base = "https://cdn.videy.co/" + id;
+
+video.src = base + ".mp4";
+
+video.onerror = () => {
+  if (!video.dataset.alt) {
+    video.dataset.alt = 1;
+    video.src = base + ".mov";
+  }
+};
+</script>
 
 </body>
 </html>
-
