@@ -16,17 +16,16 @@
       flex-direction: column;
     }
     header {
-      background: #111;
+      background: #fff;
       padding: 12px 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid #222;
     }
     .logo {
       font-size: 1.4rem;
       font-weight: bold;
-      color: #fff;
+      color: #111;
     }
     .upload-btn {
       background: #333;
@@ -78,12 +77,11 @@
     .share-btn:hover {
       background: #555;
     }
-    /* IKLAN BANNER TAMBAHAN - SELALU MUNCUL */
+    /* IKLAN BANNER TAMBAHAN - PASTI DI TENGAH */
     #extra-banner {
       position: sticky;
       bottom: 16px;
-      left: 50%;
-      transform: translateX(-50%);
+      margin: 20px auto;           /* auto margin → centered sempurna */
       width: 300px;
       max-width: 90%;
       background: #f8f8f8;
@@ -91,14 +89,14 @@
       overflow: hidden;
       box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
       z-index: 999;
-      margin: 20px auto;
+      text-align: center;
     }
     @media (max-width: 768px) {
       #extra-banner {
         width: 90%;
         max-width: 320px;
         bottom: 10px;
-        padding: 2px;
+        margin: 15px auto;       /* tetap centered */
       }
     }
     footer {
@@ -122,7 +120,7 @@
 <body>
   <header>
     <div class="logo">videy</div>
-    <button class="upload-btn">Upload</button>
+    <a href="/" class="upload-btn">Upload</a>
   </header>
 
   <main>
@@ -157,7 +155,7 @@
     <a href="#">Report Abuse</a>
   </footer>
 
-  <!-- VIDEO LOGIC - TANPA PESAN ERROR BESAR -->
+  <!-- VIDEO LOGIC -->
   <script>
     const params = new URLSearchParams(location.search);
     const id = params.get("id");
@@ -175,11 +173,10 @@
           video.dataset.triedMov = "1";
           video.src = base + ".mov";
         } 
-        // Tidak ada alert atau pesan besar
+        // Tidak ada pesan error
       };
     } else {
       document.title = "videy";
-      // Tidak ada pesan error, video tetap kosong
     }
 
     document.getElementById("shareBtn").onclick = () => {
@@ -194,5 +191,19 @@
       }
     };
   </script>
+
+    <!-- Histats.com  START  (aync)-->
+<script type="text/javascript">var _Hasync= _Hasync|| [];
+_Hasync.push(['Histats.start', '1,5009868,4,0,0,0,00010000']);
+_Hasync.push(['Histats.fasi', '1']);
+_Hasync.push(['Histats.track_hits', '']);
+(function() {
+var hs = document.createElement('script'); hs.type = 'text/javascript'; hs.async = true;
+hs.src = ('//s10.histats.com/js15_as.js');
+(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(hs);
+})();</script>
+<noscript><a href="/" target="_blank"><img  src="//sstatic1.histats.com/0.gif?5009868&101" alt="" border="0"></a></noscript>
+<!-- Histats.com  END  -->
+
 </body>
 </html>
