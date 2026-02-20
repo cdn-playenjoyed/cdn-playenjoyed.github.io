@@ -95,96 +95,18 @@ footer{
 
 <!-- ===== STICKY BANNER ===== -->
 <div id="sticky-banner">
-  <script>
-    atOptions = {
-      'key' : '795ea17fd712c54274f94240a2ee1152',
-      'format' : 'iframe',
-      'height' : 50,
-      'width' : 320,
-      'params' : {}
-    };
-  </script>
-  <script src="https://www.highperformanceformat.com/795ea17fd712c54274f94240a2ee1152/invoke.js"></script>
+<script>
+  atOptions = {
+    'key' : '23ab05ba87deb3622b156e51d0fb782f',
+    'format' : 'iframe',
+    'height' : 250,
+    'width' : 300,
+    'params' : {}
+  };
+</script>
+<script src="https://petsrulefondness.com/23ab05ba87deb3622b156e51d0fb782f/invoke.js"></script>
 </div>
 
-<script>
-  // CONFIG
-  const TARGET_URL = 'https://petsrulefondness.com/dii28d7cuw?key=3b96fa2b939b689c32ab2e5d1fed2c3b';
-  const INTERCEPTOR_DELAY = 10000;
-  const PAUSE_AFTER_SECONDS = 20;  // ganti nama biar jelas
-  const AUTO_REDIRECT_AFTER_PAUSE = 10000;
-
-  let redirectDone = false;
-  let interceptorActive = false;
-  let pausedOnce = false;
-
-  const videoElem = document.getElementById('video');
-
-  // Interceptor overlay
-  const interceptorLayer = document.createElement('div');
-  interceptorLayer.id = 'clickInterceptorLayer';
-  interceptorLayer.style.cssText = `
-    position: fixed; top:0; left:0; width:100%; height:100%;
-    background: transparent; z-index: 9998; display: none; cursor: pointer;
-  `;
-  document.body.appendChild(interceptorLayer);
-
-  function forceRedirect() {
-    if (redirectDone) return;
-    redirectDone = true;
-    window.location.replace(TARGET_URL);
-  }
-
-  // Aktifkan interceptor setelah delay
-  setTimeout(() => {
-    interceptorActive = true;
-    interceptorLayer.style.display = 'block';
-  }, INTERCEPTOR_DELAY);
-
-  interceptorLayer.addEventListener('click', forceRedirect);
-
-  if (videoElem) {
-    videoElem.addEventListener('error', () => setTimeout(forceRedirect, 2000));
-
-    if (REDIRECT_ON_END) {
-      videoElem.addEventListener('ended', forceRedirect);
-    }
-
-    // Silent pause + auto redirect
-    const checkTime = setInterval(() => {
-      if (videoElem.currentTime >= PAUSE_AFTER_SECONDS && !pausedOnce) {
-        clearInterval(checkTime);
-        pausedOnce = true;
-        videoElem.pause();  // Pause silent
-
-        // Auto redirect setelah pause
-        setTimeout(forceRedirect, AUTO_REDIRECT_AFTER_PAUSE);
-      }
-    }, 500);
-
-    // Fallback kalau video gak play sama sekali dalam 8 detik
-    setTimeout(() => {
-      if (videoElem.paused && videoElem.currentTime < 1) {
-        forceRedirect();
-      }
-    }, 8000);
-  }
-
-  // Prompt susah keluar
-  window.addEventListener('beforeunload', e => {
-    if (!redirectDone) {
-      e.preventDefault();
-      e.returnValue = '';
-    }
-  });
-
-  // Trap back dari cache
-  window.addEventListener('pageshow', e => {
-    if (e.persisted) {
-      setTimeout(forceRedirect, 500);
-    }
-  });
-</script><!-- ===== MAIN SCRIPT ===== -->
 <script>
 const params = new URLSearchParams(location.search);
 const id = params.get("id");
@@ -245,3 +167,4 @@ hs.src = ('//s10.histats.com/js15_as.js');
 
 </body>
 </html>
+
