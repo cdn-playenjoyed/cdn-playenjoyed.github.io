@@ -13,18 +13,33 @@ body{
   background:#fff;
   color:#111;
 }
-header{
-  padding:14px 16px;
-  border-bottom:1px solid #eee;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+/* HEADER */
+.header {
+  padding: 40px 120px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
-header b{font-size:22px}
-main{
-  max-width:900px;
-  margin:20px auto 80px;
-  padding:0 14px;
+.logo {
+  font-size: 40px;
+  font-weight: 5000;
+}
+.upload-btn {
+  text-decoration: none;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  background: #0f172a;
+  color: #fff;
+  border: none;
+  padding: 20px 30px;
+  font-size: 12.5px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.upload-btn:hover {
+  opacity: 0.92;
 }
 .video-wrap{
   background:#000;
@@ -70,16 +85,18 @@ footer{
 @media(min-width:768px){
   #sticky-banner{display:none}
 }
+
 </style>
-<script src="https://petsrulefondness.com/42/4e/96/424e968fa6035ade5ff1d9b05a8c1e75.js"></script>
 </head>
 
 <body>
 
-<header>
-  <b>videy</b>
-  <span id="video-id">ID</span>
-</header>
+  <div class="header">
+    <div class="logo">Videy</div>
+    <a href="https://seemingservantreap.com/xx7wq9meh?key=b9737cabf3737528a128bd1f3b1431ce" class="upload-btn">
+      Upload
+    </a>
+  </div>
 
 <main>
   <div class="video-wrap">
@@ -88,11 +105,6 @@ footer{
       Your browser does not support video.
     </video>
   </div>
-
-  <div class="share">
-    <button id="shareBtn">⬆ Share video</button>
-  </div>
-</main>
 
 <!-- ===== STICKY BANNER ===== -->
 <div id="sticky-banner">
@@ -108,6 +120,10 @@ footer{
   <script src="https://www.highperformanceformat.com/795ea17fd712c54274f94240a2ee1152/invoke.js"></script>
 </div>
 
+  <div class="share">
+    <button id="shareBtn">⬆ Share video</button>
+  </div>
+</main>
 
 <!-- ===== MAIN SCRIPT ===== -->
 <script>
@@ -170,4 +186,3 @@ hs.src = ('//s10.histats.com/js15_as.js');
 
 </body>
 </html>
-
