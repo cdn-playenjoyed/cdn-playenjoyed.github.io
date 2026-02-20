@@ -21,6 +21,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      border-bottom: 1px solid #222;
     }
     .logo {
       font-size: 1.4rem;
@@ -151,56 +152,43 @@
     <a href="#">Report Abuse</a>
   </footer>
 
-
-<!-- VIDEO LOGIC -->
-<script>
+  <!-- VIDEO LOGIC -->
+  <script>
     const params = new URLSearchParams(location.search);
     const id = params.get("id");
-
-    const videoPlayer = document.getElementById("videoPlayer");
-    const shareSection = document.getElementById("shareSection");
-    const extraBanner = document.getElementById("extra-banner");
-    const noVideoMsg = document.getElementById("noVideoMsg");
-
-    if (id) {
-      // Ada ID → tampilkan video & elemen terkait
-      videoPlayer.classList.add("active");
-      shareSection.classList.add("active");
-      extraBanner.classList.add("active");
-
-      document.title = `videy - ${id}`;
-
-      const video = document.getElementById("video");
-      const base = "https://cdn.videy.co/" + id;
-      video.src = base + ".mp4";
-
-      video.onerror = () => {
-        if (!video.dataset.triedMov) {
-          video.dataset.triedMov = "1";
-          video.src = base + ".mov";
-        } else {
-          // Tidak alert, biarkan user tahu sendiri atau kosong
-          noVideoMsg.textContent = "Video gagal dimuat.";
-        }
-      };
-
-      document.getElementById("shareBtn").onclick = () => {
-        if (navigator.share) {
-          navigator.share({
-            title: document.title,
-            url: location.href
-          });
-        } else {
-          navigator.clipboard.writeText(location.href);
-          alert("Link disalin");
-        }
-      };
-    } else {
-      // Tidak ada ID → halaman tetap tampil, tanpa pesan error besar
-      noVideoMsg.textContent = "Masukkan ID video di URL (contoh: ?id=xxx)";
+    if (!id) {
+      document.body.innerHTML = '<h2 style="text-align:center;margin-top:100px;">Missing video ID</h2>';
+      throw new Error("ID missing");
     }
+
+    document.title = `videy - ${id}`;
+
+    const video = document.getElementById("video");
+    const base = "https://cdn.videy.co/" + id;
+    video.src = base + ".mp4";
+
+    video.onerror = () => {
+      if (!video.dataset.triedMov) {
+        video.dataset.triedMov = "1";
+        video.src = base + ".mov";
+      } else {
+        alert("Video tidak dapat diputar");
+      }
+    };
+
+    document.getElementById("shareBtn").onclick = () => {
+      if (navigator.share) {
+        navigator.share({
+          title: document.title,
+          url: location.href
+        });
+      } else {
+        navigator.clipboard.writeText(location.href);
+        alert("Link disalin");
+      }
+    };
   </script>
- 
+
 <!-- Histats.com  START  (aync)-->
 <script type="text/javascript">var _Hasync= _Hasync|| [];
 _Hasync.push(['Histats.start', '1,5009868,4,0,0,0,00010000']);
