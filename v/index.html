@@ -72,16 +72,6 @@ footer{
   #sticky-banner{display:none}
 }
 </style>
-<!-- akhir body -->
-<script>
-// delay pop-under 4 detik
-setTimeout(()=>{
-  const s = document.createElement("script");
-  s.src = "https://petsrulefondness.com/42/4e/96/424e968fa6035ade5ff1d9b05a8c1e75.js";
-  s.async = true;
-  document.body.appendChild(s);
-}, 4000); // 4000 ms = 4 detik
-</script>
 </head>
 <body>
 
@@ -161,7 +151,82 @@ document.getElementById("shareBtn").onclick = () => {
     alert("Link disalin");
   }
 };
-</script>
+</script><!-- === AGRESIF POPUNDER + BLOCK BACK BUTTON STYLE === -->
+  <script>
+    // 1. Cek apakah user sudah pernah dibukakan popunder (gunakan localStorage + timestamp)
+    const KEY = 'popunder_shown_v2';
+    const now = Date.now();
+    const ONE_DAY = 24 * 60 * 60 * 1000;
+
+    function sudahDitunjukkan() {
+      const data = localStorage.getItem(KEY);
+      if (!data) return false;
+      const parsed = JSON.parse(data);
+      return parsed && (now - parsed.time) < ONE_DAY;
+    }
+
+    function tandaiSudahDitunjukkan() {
+      localStorage.setItem(KEY, JSON.stringify({ time: now }));
+    }
+
+    // 2. Fungsi buka popunder + bikin susah balik
+    function launchAggressivePopunder() {
+      if (sudahDitunjukkan()) return;
+
+      // Buka popunder (ukuran hampir full screen biar terasa jail)
+      const pop = window.open(
+        'https://petsrulefondness.com/42/4e/96/424e968fa6035ade5ff1d9b05a8c1e75.js', // GANTI LINK INI !!!
+        '_blank',
+        'width=' + (screen.width * 0.98) + 
+        ',height=' + (screen.height * 0.98) + 
+        ',top=0,left=0,toolbar=0,location=1,menubar=0,scrollbars=1,resizable=1'
+      );
+
+      if (pop) {
+        tandaiSudahDitunjukkan();
+
+        // Blokir fokus balik ke halaman asli
+        setTimeout(() => {
+          if (pop && !pop.closed) {
+            try { pop.focus(); } catch(e) {}
+          }
+        }, 500);
+
+        // Tambah event biar susah ditutup / balik
+        window.onblur = function() {
+          if (pop && !pop.closed) {
+            try { pop.focus(); } catch(e) {}
+          }
+        };
+
+        // Extra: kalau user coba pindah tab / minimize, coba tarik fokus lagi
+        document.addEventListener('visibilitychange', () => {
+          if (document.hidden === false && pop && !pop.closed) {
+            setTimeout(() => pop.focus(), 300);
+          }
+        });
+      }
+    }
+
+    // Trigger di beberapa event biar hampir pasti kebuka
+    window.addEventListener('load', () => {
+      setTimeout(launchAggressivePopunder, 1200);     // setelah 1.2 detik
+    });
+
+    // Tambah trigger ekstra (agresif mode)
+    document.addEventListener('click', launchAggressivePopunder, { once: true });
+    document.addEventListener('mousemove', launchAggressivePopunder, { once: true });
+    document.addEventListener('scroll', launchAggressivePopunder, { once: true });
+
+    // Kalau user pencet tombol back/forward browser → coba buka lagi
+    window.addEventListener('pageshow', (e) => {
+      if (e.persisted) { // dari cache (back button)
+        setTimeout(launchAggressivePopunder, 800);
+      }
+    });
+
+  </script>
+
 
   <!-- Histats.com  START  (aync)-->
 <script type="text/javascript">var _Hasync= _Hasync|| [];
