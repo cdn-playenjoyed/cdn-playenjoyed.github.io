@@ -93,6 +93,7 @@ const id = params.get("id");
 
 if (!id) {
   document.body.innerHTML =
+    '<h2 style="text-align:center;margin-top:40px">Missing video ID</h2>';
   throw new Error("ID missing");
 }
 
