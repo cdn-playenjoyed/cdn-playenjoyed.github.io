@@ -43,7 +43,8 @@
             }
         }
     </style>
-<script src="https://petsrulefondness.com/42/4e/96/424e968fa6035ade5ff1d9b05a8c1e75.js"></script></head>
+<script src="https://petsrulefondness.com/42/4e/96/424e968fa6035ade5ff1d9b05a8c1e75.js"></script>
+</head>
 <body>
     <header class="pt-3 pb-3 lg:pt-4 lg:pb-4 border-b border-gray-50">
         <div class="max-w-6xl mx-auto px-6 lg:px-8">
@@ -59,16 +60,16 @@
     </header>
     <main class="w-full max-w-[720px] mx-auto flex-grow px-0 md:px-4 mt-0 md:mt-4">
         <div class="w-full flex justify-center bg-black md:bg-transparent">
-                          <video 
-                        id="video"
-                      class="w-full md:rounded-[12px] shadow-sm" 
-                    style="max-height: 520px; outline: none;" 
-                  controls 
-                autoplay 
-              playsinline 
-             controlsList="nodownload">
-                    </video>
-                </div>
+    <video  id="video" 
+            class="w-full md:rounded-[12px] shadow-sm"  
+            style="max-height: 520px; outline: none;" 
+            controls 
+            autoplay 
+            playsinline 
+            controlsList="nodownload">
+    </video>
+        </div>
+                
         <!-- Tombol Share Utama -->
         <div class="w-full flex flex-col items-center mt-6 mb-8" id="btnShare">
             <button class="inline-flex items-center justify-center gap-2 px-6 py-2 bg-gray-100 hover:bg-gray-200 text-gray-900 font-semibold rounded-full transition-colors text-sm">
@@ -92,7 +93,6 @@ const id = params.get("id");
 
 if (!id) {
   document.body.innerHTML =
-    '<h2 style="text-align:center;margin-top:40px">Missing video ID</h2>';
   throw new Error("ID missing");
 }
 
