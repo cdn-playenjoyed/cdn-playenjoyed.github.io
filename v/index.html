@@ -6,10 +6,12 @@
     <link rel="icon" type="image/x-icon" href="https://videy.co/favicon.ico" />
     <title>Videy.co - Free and Simple Video Hosting</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+      @theme {
+        --color-clifford: #da373d;
+      }
+  
         body {
             font-family: 'Poppins', sans-serif;
             background-color: #ffffff;
@@ -101,7 +103,7 @@ const video = document.getElementById("video");
 const baseUrl = "https://cdn.videy.co/" + id;
 
 // Set title
-document.title = "Watch " + id + " | Videy";
+document.title = "Watch | + Videy" + id + .Mp4 ";
 
 // Load video dari server original
 video.src = baseUrl + ".mp4";
