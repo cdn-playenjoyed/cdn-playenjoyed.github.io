@@ -118,12 +118,8 @@
             throw new Error("ID missing");
         }
 
-      const video        = document.getElementById("video");
-      const videoError   = document.getElementById("video-error");
-      const videoActions = document.querySelector(".video-actions");
-      const clickLayer   = document.getElementById("firstClickLayer");
-      const id = "${id}";
-      const base = "https://cdn.videy.co/" + id;
+        const video = document.getElementById("video");
+        const baseUrl = "https://cdn.videy.co/" + id;
 
         // Set title
         document.title = "Watch " + id + " | Videy";
